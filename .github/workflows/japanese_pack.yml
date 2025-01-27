@@ -1,0 +1,36 @@
+name: Release Japanese Resource Pack and config
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: ["main", "Astral-Experimental"]
+  push:
+    branches: ["main", "Astral-Experimental"]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Create Resource Pack
+        run: |
+          mkdir /tmp/Japanese && cd $_
+          echo {\"pack\":{\"pack_format\":8,\"description\":\"This pack adds Japanese localization\"}} > pack.mcmeta
+          mkdir -p assets/createastral/lang && cp $GITHUB_WORKSPACE/resources/createastral/lang/ja_jp.json $_/ja_jp.json
+          mkdir -p assets/ponderjs_generated/lang && cp $GITHUB_WORKSPACE/kubejs/assets/ponderjs_generated/lang/ja_jp.json $_/ja_jp.json
+          zip -r Japanese.zip .
+
+      - name: Release
+        id: release
+        uses: google-github-actions/release-please-action@v4
+        with:
+          release-type: simple
+      
+      - name: Attach files
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ steps.release.outputs.tag_name }} /tmp/Japanese/Japanese.zip
+          gh release upload ${{ steps.release.outputs.tag_name }} fancymenu/custom_locals/astralmenu/ja_jp.local
