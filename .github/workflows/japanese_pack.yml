@@ -24,6 +24,6 @@ jobs:
 
       - name: Release
         run: |
-          date "+%Y%m%d%H%M" && gh release create $_ /tmp/Japanese/Japanese.zip fancymenu/custom_locals/astralmenu/ja_jp.local
+          date "+%Y%m%d%H%M" && gh release create $_ /tmp/Japanese/Japanese.zip config/fancymenu/custom_locals/astralmenu/ja_jp.local
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
