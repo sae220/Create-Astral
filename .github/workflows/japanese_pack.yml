@@ -23,14 +23,7 @@ jobs:
           zip -r Japanese.zip .
 
       - name: Release
-        id: release
-        uses: google-github-actions/release-please-action@v4
-        with:
-          release-type: simple
-      
-      - name: Attach files
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ steps.release.outputs.tag_name }} /tmp/Japanese/Japanese.zip
-          gh release upload ${{ steps.release.outputs.tag_name }} fancymenu/custom_locals/astralmenu/ja_jp.local
+          date "+%Y%m%d%H%M" && gh release create $_ /tmp/Japanese/Japanese.zip fancymenu/custom_locals/astralmenu/ja_jp.local
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
